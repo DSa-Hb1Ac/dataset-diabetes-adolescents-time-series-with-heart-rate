@@ -1,1 +1,1 @@
-Fitbit/*.csv filter=lfs diff=lfs merge=lfs -text
+data-csv/Fitbit/*.csv filter=lfs diff=lfs merge=lfs -text
