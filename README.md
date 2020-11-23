@@ -127,7 +127,7 @@ In this section the data format is described.<br>
 
 ## Heart rate
 
-**source:** [data-csv/Fitbit-heart-rate.csv](data-csv/Fitbit-heart-rate.csv) <br>
+**source:** [data-csv/Fitbit-heart-rate.csv](data-csv/Fitbit/Fitbit-heart-rate.csv) <br>
 
 | Column index | Column name |  Description | Unit | Format | Example |
 |---|---|---|---|---|---|
@@ -141,7 +141,7 @@ In this section the data format is described.<br>
 
 ## Steps
 
-**source:** [data-csv/Fitbit-steps.csv](data-csv/Fitbit-steps.csv) <br>
+**source:** [data-csv/Fitbit-steps.csv](data-csv/Fitbit/Fitbit-steps.csv) <br>
 
 | Column index | Column name |  Description | Unit | Format | Example |
 |---|---|---|---|---|---|
@@ -155,7 +155,7 @@ In this section the data format is described.<br>
 
 ## Sleep
 
-**source:** [data-csv/Fitbit-sleep.csv](data-csv/Fitbit-sleep.csv) <br>
+**source:** [data-csv/Fitbit-sleep.csv](data-csv/Fitbit/Fitbit-sleep.csv) <br>
 
 | Column index | Column name |  Description | Unit | Format | Example |
 |---|---|---|---|---|---|
