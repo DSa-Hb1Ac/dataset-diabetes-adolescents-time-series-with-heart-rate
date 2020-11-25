@@ -2,6 +2,8 @@ This repository contains a curated dataset comprising real patient data (24 adol
 
 **_`TODO: refer to published article(s) of research?`_**
 
+**Note**: [Git LFS](https://git-lfs.github.com/) is required to clone the CSV files in [data-csv/Fitbit/](data-csv/Fitbit)
+
 # Data pre-processing
 
 This section described per device/system how the data was obtained and pre-processed. <br>
