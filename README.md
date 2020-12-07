@@ -82,8 +82,6 @@ In this section the data format is described.<br>
 
 ## Insulin Pump 
 
-**_`TODO: Check which columns are used by ML algorithm!`_**
-
 **source:** [data-csv/Medtronic.csv](data-csv/Medtronic.csv) <br>
 
 **Note:**
@@ -102,9 +100,25 @@ In this section the data format is described.<br>
 |6| **File** | File number of pump export files <br>_(some pump exports were supplied in multiple files. Original sequence of events can be reconstructed with this column and column 7 -  'Index')_|  | numeric (integer) | 1 |
 |7| **Index** | Original Index number of pump export file  |  | numeric (integer) | 21 |
 |9| **BG Reading [mmol/l]**|Manual blood glucose reading from a Blood Glucose Meter (BGM)|millimol per liter|numeric (floating point) |5.6|
-|16| **Bolus Volume Delivered [IU]**|Amount of Insulin delivered by the insulin pump|[International Unit](https://en.wikipedia.org/wiki/International_unit)|numeric (floating point) |1.8|
-|28| **BWZ Carb Input [g]**|Amount of carbohydrates the user entered in the Bolus Wizard (BWZ) calculation on the insulin pump|grams|numeric (integer) |24|
-|34| **Sensor Glucose [mmol/l]**| Automatic blood glucose reading from a Flash Glucose Monitor (FGM) or Continuous Glucose Monitor (CGM) |millimol per liter|numeric (floating point)|6.4|
+|10| **Basal Rate [IU/hr]**|Current [basal rate](https://en.wikipedia.org/wiki/Basal_rate) of the insulin pump|[International Unit](https://en.wikipedia.org/wiki/International_unit) per hour|numeric (floating point) |0.2|
+|11| **Temp Basal Amount**|Temporary basal amount of the insulin pump | _depends on column 12_ | _depends on column 12_ | _depends on column 12_ |
+|12| **Temp Basal Type**|Temporary basal rate type of column 11 | | character  | Percent |
+|13| **Temp Basal Duration [hh:mm:ss]**|Duration of temporary basal rate|  | hh:mm:ss  | 00:42:00 |
+|14| **Bolus Type**|Type of [bolus](https://en.wikipedia.org/wiki/Bolus_(medicine)) given by insulin pump <br>_Normal / Square / Dual (combination of Normal and Square), [more information on bolus types](https://s3.amazonaws.com/medtronic-hcp/Dual-Square%20Quick%20Reference%20Guide%20for%20MiniMed%20530G.pdf)_|  | character | Normal |
+|16| **Bolus Volume Delivered [IU]**|Amount of Insulin administered by the insulin pump for this bolus|[International Unit](https://en.wikipedia.org/wiki/International_unit)|numeric (floating point) |1.8|
+|17| **Bolus Duration [hh:mm:ss]**|Duration of the bolus (for Square and Dual wave (square part) type)| | hh:mm:ss | 01:30:00 |
+|23| **BWZ Estimate [IU]** | Bolus Wizard (BWZ) output: Estimate of amount of insulin to deliver of the dosage calculation by the Bolus Wizard (BWZ)|[International Unit](https://en.wikipedia.org/wiki/International_unit)|numeric (floating point) | 0.8 | 
+|24| **BWZ Target High BG [mmol/l]** | Bolus Wizard (BWZ) input: High value of the blood glucose target to reach |millimol per liter |numeric (floating point) | 6.0 | 
+|25| **BWZ Target Low BG [mmol/l]** | Bolus Wizard (BWZ) input: Low value of the blood glucose target to reach |millimol per liter |numeric (floating point) | 5.5 | 
+|26| **BWZ Carb Ratio [g/IU]** | Bolus Wizard (BWZ) input: insulin to carbohydrate ratio (ICR) |grams per [International Unit](https://en.wikipedia.org/wiki/International_unit) |numeric (integer) | 24 | 
+|27| **BWZ Insulin Sensitivity [mmol/L/U]** | Bolus Wizard (BWZ) input: insulin sensitivity factor (ISF) |millimol per liter per [International Unit](https://en.wikipedia.org/wiki/International_unit) |numeric (integer) | 6 | 
+|28| **BWZ Carb Input [g]**|Bolus Wizard (BWZ) input: Amount of carbohydrates |grams|numeric (integer) |35|
+|29| **BWZ BG Input [mmol/l]**|Bolus Wizard (BWZ) input: current blood glucose value |millimol per liter |numeric (floating point)|8.3|
+|30| **BWZ Correction Estimate [IU]**|Bolus Wizard (BWZ) output: 'food-part' of insulin dosage calculation |[International Unit](https://en.wikipedia.org/wiki/International_unit)|numeric (floating point)|0.4|
+|31| **BWZ Food Estimate [IU]**|Bolus Wizard (BWZ) output: 'correction-part' of insulin dosage calculation |[International Unit](https://en.wikipedia.org/wiki/International_unit)|numeric (floating point)|0.4|
+|32| **BWZ Active Insulin [IU]**|Bolus Wizard (BWZ) input: insulin on board (IOB) |[International Unit](https://en.wikipedia.org/wiki/International_unit)|numeric (floating point)|0.2|
+|34| **Sensor Glucose [mmol/l]**| Automatic blood glucose reading from a Flash Glucose Monitor (FGM) or Continuous Glucose Monitor (CGM) |millimol per liter|numeric (floating point)|8.3|
+
 
 ## Blood glucose
 
