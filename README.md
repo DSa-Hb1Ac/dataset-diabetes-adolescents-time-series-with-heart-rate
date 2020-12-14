@@ -1,4 +1,4 @@
-This repository contains a curated dataset comprising real patient data (24 adolescents with type 1 diabetes) from a insulin pump, continuous/flash blood glucose monitor, activity tracker and carbohydrates estimates over a period of 3 months.
+This repository contains a curated dataset comprising real patient data (24 adolescents with type 1 diabetes) from a insulin pump, continuous/flash blood glucose monitor (CGM/FGM), activity tracker and carbohydrates estimates over a period of 3 months.
 
 **_`TODO: refer to published article(s) of research?`_**
 
@@ -18,6 +18,7 @@ Refer to the [data format section](#data-format) for a detailed description of t
 ### Medtronic MiniMed 640G and MiniMed 670G (Insulin pumps)
 - Export files (in CSV format) per subject were obtained via the hospital.
 - For some subjects two export files ('part 1' and 'part 2') were obtained. In some cases overlap occurred between these files, this duplicate data was removed.
+- For subjects with an Medtronic CGM (Enlite?), the blood glucose measurements are also in this file
 - The different export files were combined into one CSV file and the column '_Subject code number_'  was added. 
 
 ### Abbott FreeStyle Libre (Flash Glucose Monitor)
@@ -32,23 +33,23 @@ Refer to the [data format section](#data-format) for a detailed description of t
 
 ## Date and time information
 
-The formatting of date and time information in the original exports was not equal across the different files. Date and time information was equalized to a [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) time stamp in the format _YYYY-MM-DDThh:mm:ss±hhmm_. For convenience the date, time and UTC offset were also added as separate columns.
+The formatting of date and time information in the original exports was not equal across the different export files. Date and time information was equalized to a [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) time stamp in the format _YYYY-MM-DDThh:mm:ss±hhmm_. For convenience the date, time and UTC offset were also added as separate columns.
 
 ## Time zone information
 
-All timing information of the original data sources were in local time and lacked time zone information. Time zone information was added after obtaining the export files 
+All timing information of the original data sources were in local time and lacked time zone information. Time zone information was added after obtaining the export files. 
 
 ### Daylight Saving Time (DST)
 The dataset contains a transition from Daylight Saving Time (DST) to standard time on 2019-10-27T03:00:00+0200 to 2019-10-27T02:00:00+0100. Each device/system handles this transition differently:
 
-**Medtronic MiniMed 640G and MiniMed 670G**
+**Medtronic MiniMed 640G and MiniMed 670G** <br>
 The clock of this devices doesn't adjust automatically when a transition from DST to standard time occurs, the clock has to be adjusted manually. Adjustment of the clock can be found in the export file in column 8 - '_New Device Time_'.<br>
 **_`TODO: fix transition from Daylight Saving Time (DST) to standard time based on 'New Device Time' column instead of always at 2019-10-27T03:00:00+0200`_**
 
-**Abbott FreeStyle Libre**
-At 2019-10-27T03:00:00+0200 the clock of the FreeStyle Libre (sensor or reader/app?) adjusts itself automatically. The data from 2019-10-27T02:00:00+0200 to 2019-10-27T03:00:00+0200 and 2019-10-27T0:00:00+0100 to 2019-10-27T03:00:00+0100 appears in the export file. However, this export file contains no time zone information, therefore the time zone information for the data records from 2019-10-27T02:00 to 2019-10-27T03:00 is unknown and omitted in the resulting data source.
+**Abbott FreeStyle Libre** <br>
+At 2019-10-27T03:00:00+0200 the clock of the FreeStyle Libre (_sensor or reader/app?_) adjusts itself automatically. The data from 2019-10-27T02:00:00+0200 to 2019-10-27T03:00:00+0200 and 2019-10-27T0:00:00+0100 to 2019-10-27T03:00:00+0100 appears in the export file. However, this export file contains no time zone information, therefore the time zone information for the data records from 2019-10-27T02:00 to 2019-10-27T03:00 is unknown and omitted in the resulting data source.
 
-**Fitbit Inspire HR**
+**Fitbit Inspire HR** <br>
 At 2019-10-27T03:00:00+0200 the clock of the Fitbit Inspire HR adjusts itself automatically. The data from 2019-10-27T02:00:00+0200 to 2019-10-27T03:00:00+0200 is overwritten with the data from 2019-10-27T02:00:00+0100 to 2019-10-27T03:00:00+0100 (therefore 2019-10-27 has 24 hours of data instead of 25 hours).
 
 # Data format
@@ -93,17 +94,17 @@ In this section the data format is described.<br>
 | Column index | Column name |  Description | Unit | Format | Example |
 |---|---|---|---|---|---|
 |1| **Subject code number** | Number indicating which subject the data record belongs to || numeric (integer) | 903 |
-|2| **Local datetime [ISO8601]** | Date and time in local time (Central European Time (CET)) of the data record <br> **Note:** Data records per subject do not necessarily appear in chronological order in this data source ||YYYY-MM-DDThh:mm:ss±hhmm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 2019-10-15T12:00:00+0200 |
+|2| **Local datetime [ISO8601]** | Date and time in local time (Central European Time (CET)) of the data record <br> **Note:** Data records per subject are sorted on 'File' and 'Index' and therefore do not necessarily appear in chronological order in this data source ||YYYY-MM-DDThh:mm:ss±hhmm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 2019-10-15T12:00:00+0200 |
 |3| **Local date [yyyy-mm-dd]** | Date in local time (Central European Time (CET)) of the data record || YYYY-MM-DD ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 2019-10-15 |
 |4| **Local time [hh:mm]** | Time in local time (Central European Time (CET)) of the data record || hh:mm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 12:00 |
 |5| **UTC offset [hr]** | Difference in hours for the local time (Central European Time (CET)) from Coordinated Universal Time (UTC)  | hour | numeric (floating point) | 2 |
 |6| **File** | File number of pump export files <br>_(some pump exports were supplied in multiple files. Original sequence of events can be reconstructed with this column and column 7 -  'Index')_|  | numeric (integer) | 1 |
 |7| **Index** | Original Index number of pump export file  |  | numeric (integer) | 21 |
-|9| **BG Reading [mmol/l]**|Manual blood glucose reading from a Blood Glucose Meter (BGM)|millimol per liter|numeric (floating point) |5.6|
+|9| **BG Reading [mmol/l]**|Manual blood glucose reading from a (connected) Blood Glucose Meter (BGM)|millimol per liter|numeric (floating point) |5.6|
 |10| **Basal Rate [IU/hr]**|Current [basal rate](https://en.wikipedia.org/wiki/Basal_rate) of the insulin pump|[International Unit](https://en.wikipedia.org/wiki/International_unit) per hour|numeric (floating point) |0.2|
-|11| **Temp Basal Amount**|Temporary basal amount of the insulin pump | _depends on column 12_ | _depends on column 12_ | _depends on column 12_ |
+|11| **Temp Basal Amount**|Temporary increase or decrease amount of the basal rate| _depends on column 12_ | _depends on column 12_ | _depends on column 12_ |
 |12| **Temp Basal Type**|Temporary basal rate type of column 11 | | character  | Percent |
-|13| **Temp Basal Duration [hh:mm:ss]**|Duration of temporary basal rate|  | hh:mm:ss  | 00:42:00 |
+|13| **Temp Basal Duration [hh:mm:ss]**|Duration of the temporary increase or decrease of the basal rate|  | hh:mm:ss  | 00:42:00 |
 |14| **Bolus Type**|Type of [bolus](https://en.wikipedia.org/wiki/Bolus_(medicine)) given by insulin pump <br>_Normal / Square / Dual (combination of Normal and Square), [more information on bolus types](https://s3.amazonaws.com/medtronic-hcp/Dual-Square%20Quick%20Reference%20Guide%20for%20MiniMed%20530G.pdf)_|  | character | Normal |
 |16| **Bolus Volume Delivered [IU]**|Amount of Insulin administered by the insulin pump for this bolus|[International Unit](https://en.wikipedia.org/wiki/International_unit)|numeric (floating point) |1.8|
 |17| **Bolus Duration [hh:mm:ss]**|Duration of the bolus (for Square and Dual wave (square part) type)| | hh:mm:ss | 01:30:00 |
@@ -132,7 +133,7 @@ In this section the data format is described.<br>
 | Column index | Column name |  Description | Unit | Format | Example |
 |---|---|---|---|---|---|
 |1| **Subject code number** | Number indicating which subject the data record belongs to || numeric (integer) | 903 |
-|2| **Local datetime [ISO8601]** | Date and time in local time (Central European Time (CET)) of the data record <br> **Note:** Data records per subject do not necessarily appear in chronological order in this data source  ||YYYY-MM-DDThh:mm:ss±hhmm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 2019-10-15T12:00:00+0200 |
+|2| **Local datetime [ISO8601]** | Date and time in local time (Central European Time (CET)) of the data record <br> ||YYYY-MM-DDThh:mm:ss±hhmm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 2019-10-15T12:00:00+0200 |
 |3| **Local date [yyyy-mm-dd]** | Date in local time (Central European Time (CET)) of the data record || YYYY-MM-DD ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 2019-10-15 |
 |4| **Local time [hh:mm]** | Time in local time (Central European Time (CET)) of the data record || hh:mm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 12:00 |
 |5| **UTC offset [hr]** | Difference in hours for the local time (Central European Time (CET)) from Coordinated Universal Time (UTC)  | hour | numeric (floating point) | 2 |
