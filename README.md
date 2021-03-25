@@ -37,20 +37,19 @@ The formatting of date and time information in the original exports was not equa
 
 ## Time zone information
 
-All timing information of the original data sources were in local time and lacked time zone information. Time zone information was added after obtaining the export files. 
+All timing information of the original data sources were in local time and lacked time zone information. Time zone information was added automatically after obtaining the export files, assuming all data was collected in the Europe/Amsterdam timezone.
 
 ### Daylight Saving Time (DST)
-The dataset contains a transition from Daylight Saving Time (DST) to standard time on 2019-10-27T03:00:00+0200 to 2019-10-27T02:00:00+0100. Each device/system handles this transition differently:
+The period in which the data was collected contains a transition from Central European Summer Time (CEST) to Central European Time (CET): one second after 2019-10-27T02:59:59+0200 the time is 2019-10-27T02:00:00+0100. Each device/system handles this transition differently:
 
 **Medtronic MiniMed 640G and MiniMed 670G** <br>
-The clock of this devices doesn't adjust automatically when a transition from DST to standard time occurs, the clock has to be adjusted manually. Adjustment of the clock can be found in the export file in column 8 - '_New Device Time_'.<br>
-**_`TODO: fix transition from Daylight Saving Time (DST) to standard time based on 'New Device Time' column instead of always at 2019-10-27T03:00:00+0200`_**
+The clock of this devices doesn't adjust automatically when a transition from CEST to CET occurs; the device clock has to be adjusted manually. Adjustment of the clock can be found in the export file in column 8 - '_New Device Time_'. In the current version of the data, time zone offsets have been added automatically based on the local clock. Timestamps labelled as 2019-10-27T03:00:00+0100 to the moment the user adjusted the device clock manually (indicated by an entry in column 8 - '_New Device Time_'), are invalid, i.e. one hour needs to be subtracted from the local clock time indicated. This manual correction has **NOT** been done in the current version of the data.
 
 **Abbott FreeStyle Libre** <br>
-At 2019-10-27T03:00:00+0200 the clock of the FreeStyle Libre (_sensor or reader/app?_) adjusts itself automatically. The data from 2019-10-27T02:00:00+0200 to 2019-10-27T03:00:00+0200 and 2019-10-27T0:00:00+0100 to 2019-10-27T03:00:00+0100 appears in the export file. However, this export file contains no time zone information, therefore the time zone information for the data records from 2019-10-27T02:00 to 2019-10-27T03:00 is unknown and omitted in the resulting data source.
+Shortly after 2019-10-27T02:59:59+0200, the clock of the FreeStyle Libre (_sensor or reader/app?_) adjusts itself automatically. The data measured from 2019-10-27T02:00:00+0200 to 2019-10-27T02:59:59+0200 and 2019-10-27T02:00:00+0100 to 2019-10-27T02:59:59+0100 appeared in the export file without time zone information. Therefore, we omitted the time zone information for the data records from 2019-10-27T02:00 to 2019-10-27T02:59.
 
 **Fitbit Inspire HR** <br>
-At 2019-10-27T03:00:00+0200 the clock of the Fitbit Inspire HR adjusts itself automatically. The data from 2019-10-27T02:00:00+0200 to 2019-10-27T03:00:00+0200 is overwritten with the data from 2019-10-27T02:00:00+0100 to 2019-10-27T03:00:00+0100 (therefore 2019-10-27 has 24 hours of data instead of 25 hours).
+Shortly after 2019-10-27T02:59:59+0200, the clock of the Fitbit Inspire HR adjusts itself automatically. The data collected between 2019-10-27T02:00:00+0200 and 2019-10-27T02:59:59+0200 is overwritten with the data from 2019-10-27T02:00:00+0100 to 2019-10-27T02:59:59+0100 (therefore 2019-10-27 has 24 hours of data instead of 25 hours).
 
 # Data format
 
@@ -94,10 +93,10 @@ In this section the data format is described.<br>
 | Column index | Column name |  Description | Unit | Format | Example |
 |---|---|---|---|---|---|
 |1| **Subject code number** | Number indicating which subject the data record belongs to || numeric (integer) | 903 |
-|2| **Local datetime [ISO8601]** | Date and time in local time (Central European Time (CET)) of the data record <br> **Note:** Data records per subject are sorted on 'File' and 'Index' and therefore do not necessarily appear in chronological order in this data source ||YYYY-MM-DDThh:mm:ss±hhmm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 2019-10-15T12:00:00+0200 |
-|3| **Local date [yyyy-mm-dd]** | Date in local time (Central European Time (CET)) of the data record || YYYY-MM-DD ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 2019-10-15 |
-|4| **Local time [hh:mm]** | Time in local time (Central European Time (CET)) of the data record || hh:mm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 12:00 |
-|5| **UTC offset [hr]** | Difference in hours for the local time (Central European Time (CET)) from Coordinated Universal Time (UTC)  | hour | numeric (floating point) | 2 |
+|2| **Local datetime [ISO8601]** | Date and time in local time of the data record <br> **Note:** Data records per subject are sorted on 'File' and 'Index' and therefore do not necessarily appear in chronological order in this data source ||YYYY-MM-DDThh:mm:ss±hhmm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 2019-10-15T12:00:00+0200 |
+|3| **Local date [yyyy-mm-dd]** | Date in local time of the data record || YYYY-MM-DD ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 2019-10-15 |
+|4| **Local time [hh:mm]** | Time in local time of the data record || hh:mm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 12:00 |
+|5| **UTC offset [hr]** | Difference in hours for the local time from Coordinated Universal Time (UTC)  | hour | numeric (floating point) | 2 |
 |6| **File** | File number of pump export files <br>_(some pump exports were supplied in multiple files. Original sequence of events can be reconstructed with this column and column 7 -  'Index')_|  | numeric (integer) | 1 |
 |7| **Index** | Original Index number of pump export file  |  | numeric (integer) | 21 |
 |9| **BG Reading [mmol/l]**|Manual blood glucose reading from a (connected) Blood Glucose Meter (BGM)|millimol per liter|numeric (floating point) |5.6|
@@ -133,10 +132,10 @@ In this section the data format is described.<br>
 | Column index | Column name |  Description | Unit | Format | Example |
 |---|---|---|---|---|---|
 |1| **Subject code number** | Number indicating which subject the data record belongs to || numeric (integer) | 903 |
-|2| **Local datetime [ISO8601]** | Date and time in local time (Central European Time (CET)) of the data record <br> ||YYYY-MM-DDThh:mm:ss±hhmm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 2019-10-15T12:00:00+0200 |
-|3| **Local date [yyyy-mm-dd]** | Date in local time (Central European Time (CET)) of the data record || YYYY-MM-DD ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 2019-10-15 |
-|4| **Local time [hh:mm]** | Time in local time (Central European Time (CET)) of the data record || hh:mm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 12:00 |
-|5| **UTC offset [hr]** | Difference in hours for the local time (Central European Time (CET)) from Coordinated Universal Time (UTC)  | hour | numeric (floating point) | 2 |
+|2| **Local datetime [ISO8601]** | Date and time in local time of the data record <br> ||YYYY-MM-DDThh:mm:ss±hhmm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 2019-10-15T12:00:00+0200 |
+|3| **Local date [yyyy-mm-dd]** | Date in local timeof the data record || YYYY-MM-DD ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 2019-10-15 |
+|4| **Local time [hh:mm]** | Time in local time of the data record || hh:mm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 12:00 |
+|5| **UTC offset [hr]** | Difference in hours for the local time from Coordinated Universal Time (UTC)  | hour | numeric (floating point) | 2 |
 |6|**Record Type**|Type of the data record: <br> 0 = Historic Glucose <br>1 = Scan Glucose <br> 2 = Strip Glucose <br> 3 = ? (not present in this data source) <br> 4 = Non-numeric Rapid-Acting Insulin <br> 5 = Non-numeric Food<br> 6 = ? (possibly indicates a (NFC?) reading error)||numeric (integer)|0|
 |7|**Historic Glucose [mmol/l]**| Historic automatic glucose reading from the sensor (every 15 minutes) <br> **Note:** A maximum of 8 hours is stored on the FreeStyle Libre sensor|millimol per liter|numeric (floating point)|5.7|
 |8|**Scan Glucose [mmol/l]**| Manual glucose reading from the FreeStyle Libre sensor. <br>Occurs when the subject scans the FreeStyle Libre sensor with a FreeStyle Libre Reader or smartphone.<br> Historic glucose readings up to 8 hours or the previous manual reading are also transferred at this point. |millimol per liter|numeric (floating point)|6.3|
@@ -150,8 +149,8 @@ In this section the data format is described.<br>
 |---|---|---|---|---|---|
 |1| **Subject code number** | Number indicating which subject the data record belongs to || numeric (integer) | 903 |
 |2| **Local datetime [ISO8601]** | Date and time in local time (Central European Time (CET)) of the data record ||YYYY-MM-DDThh:mm:ss±hhmm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 2019-10-15T12:00:00+0200 |
-|3| **Local date [yyyy-mm-dd]** | Date in local time (Central European Time (CET)) of the data record || YYYY-MM-DD ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 2019-10-15 |
-|4| **Local time [hh:mm]** | Time in local time (Central European Time (CET)) of the data record || hh:mm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 12:00 |
+|3| **Local date [yyyy-mm-dd]** | Date in local time of the data record || YYYY-MM-DD ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 2019-10-15 |
+|4| **Local time [hh:mm]** | Time in local time of the data record || hh:mm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 12:00 |
 |5| **UTC offset [hr]** | Difference in hours for the local time (Central European Time (CET)) from Coordinated Universal Time (UTC)  | hour | numeric (floating point) | 2 |
 |6| **heart rate [#/min]** | Heart rate of the subject | beats per minute | numeric (integer) | 142 |
 
@@ -163,10 +162,10 @@ In this section the data format is described.<br>
 | Column index | Column name |  Description | Unit | Format | Example |
 |---|---|---|---|---|---|
 |1| **Subject code number** | Number indicating which subject the data record belongs to || numeric (integer) | 903 |
-|2| **Local datetime [ISO8601]** | Date and time in local time (Central European Time (CET)) of the data record ||YYYY-MM-DDThh:mm:ss±hhmm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 2019-10-15T12:00:00+0200 |
-|3| **Local date [yyyy-mm-dd]** | Date in local time (Central European Time (CET)) of the data record || YYYY-MM-DD ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 2019-10-15 |
-|4| **Local time [hh:mm]** | Time in local time (Central European Time (CET)) of the data record || hh:mm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 12:00 |
-|5| **UTC offset [hr]** | Difference in hours for the local time (Central European Time (CET)) from Coordinated Universal Time (UTC)  | hour | numeric (floating point) | 2 |
+|2| **Local datetime [ISO8601]** | Date and time in local time of the data record ||YYYY-MM-DDThh:mm:ss±hhmm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 2019-10-15T12:00:00+0200 |
+|3| **Local date [yyyy-mm-dd]** | Date in local time of the data record || YYYY-MM-DD ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 2019-10-15 |
+|4| **Local time [hh:mm]** | Time in local time of the data record || hh:mm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 12:00 |
+|5| **UTC offset [hr]** | Difference in hours for the local time from Coordinated Universal Time (UTC)  | hour | numeric (floating point) | 2 |
 |6| **steps [#]** | number of steps taken in this minute by the subject <br> **note:** The [Fitbit Web API](https://dev.fitbit.com/build/reference/web-api/) returns 0 for both 0 steps and no measurement |  | numeric (integer) | 42 |
 
 
@@ -177,9 +176,9 @@ In this section the data format is described.<br>
 | Column index | Column name |  Description | Unit | Format | Example |
 |---|---|---|---|---|---|
 |1| **Subject code number** | Number indicating which subject the data record belongs to || numeric (integer) | 903 |
-|2| **Local datetime start [ISO8601]** | Start date and time in local time (Central European Time (CET)) of the sleep level record ||YYYY-MM-DDThh:mm:ss±hhmm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 2019-10-15T12:00:00+0200 |
-|3| **Local date start [yyyy-mm-dd]** | Start date in local time (Central European Time (CET)) of the sleep level record|| YYYY-MM-DD ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 2019-10-15 |
-|4| **Local time start [hh:mm]** | Start time in local time (Central European Time (CET)) of the sleep level record || hh:mm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 12:00 |
-|5| **UTC offset start [hr]** | Difference in hours for the local start time (Central European Time (CET)) from Coordinated Universal Time (UTC)  | hour | numeric (floating point) | 2 |
+|2| **Local datetime start [ISO8601]** | Start date and time in local time of the sleep level record ||YYYY-MM-DDThh:mm:ss±hhmm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 2019-10-15T12:00:00+0200 |
+|3| **Local date start [yyyy-mm-dd]** | Start date in local time of the sleep level record|| YYYY-MM-DD ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 2019-10-15 |
+|4| **Local time start [hh:mm]** | Start time in local time of the sleep level record || hh:mm ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))  | 12:00 |
+|5| **UTC offset start [hr]** | Difference in hours for the local start time from Coordinated Universal Time (UTC)  | hour | numeric (floating point) | 2 |
 |6| **level** | Level of the sleep. <br> Refer to the [Fitbit Web API](https://dev.fitbit.com/build/reference/web-api/sleep/) for more information on the different sleep levels || character | deep |
 |7| **duration [s]** | Duration of the sleep | seconds | numeric (integer) | 4200 |
