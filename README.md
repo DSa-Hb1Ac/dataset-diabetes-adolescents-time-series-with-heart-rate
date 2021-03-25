@@ -37,14 +37,13 @@ The formatting of date and time information in the original exports was not equa
 
 ## Time zone information
 
-All timing information of the original data sources were in local time and lacked time zone information. Time zone information was added after obtaining the export files, assuming all data was collected in the Europe/Amsterdam timezone.
+All timing information of the original data sources were in local time and lacked time zone information. Time zone information was added automatically after obtaining the export files, assuming all data was collected in the Europe/Amsterdam timezone.
 
 ### Daylight Saving Time (DST)
 The period in which the data was collected contains a transition from Central European Summer Time (CEST) to Central European Time (CET): one second after 2019-10-27T02:59:59+0200 the time is 2019-10-27T02:00:00+0100. Each device/system handles this transition differently:
 
 **Medtronic MiniMed 640G and MiniMed 670G** <br>
-The clock of this devices doesn't adjust automatically when a transition from CEST to CET occurs; the clock has to be adjusted manually. Adjustment of the clock can be found in the export file in column 8 - '_New Device Time_'.<br>
-**_`TODO: fix transition from Daylight Saving Time (DST) to standard time based on 'New Device Time' column instead of always shortly after 2019-10-27T02:59:59+0200`_**
+The clock of this devices doesn't adjust automatically when a transition from CEST to CET occurs; the device clock has to be adjusted manually. Adjustment of the clock can be found in the export file in column 8 - '_New Device Time_'. In the current version of the data, time zone offsets have been added automatically based on the local clock. Timestamps labelled as 2019-10-27T03:00:00+0100 to the moment the user adjusted the device clock manually (indicated by an entry in column 8 - '_New Device Time_'), are invalid, i.e. one hour needs to be subtracted from the local clock time indicated. This manual correction has **NOT** been done in the current version of the data.
 
 **Abbott FreeStyle Libre** <br>
 Shortly after 2019-10-27T02:59:59+0200, the clock of the FreeStyle Libre (_sensor or reader/app?_) adjusts itself automatically. The data measured from 2019-10-27T02:00:00+0200 to 2019-10-27T02:59:59+0200 and 2019-10-27T02:00:00+0100 to 2019-10-27T02:59:59+0100 appeared in the export file without time zone information. Therefore, we omitted the time zone information for the data records from 2019-10-27T02:00 to 2019-10-27T02:59.
