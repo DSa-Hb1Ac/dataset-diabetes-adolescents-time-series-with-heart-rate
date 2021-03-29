@@ -1,7 +1,5 @@
 This repository contains a curated dataset comprising real patient data (24 adolescents with type 1 diabetes) from a insulin pump, continuous/flash blood glucose monitor (CGM/FGM), activity tracker and carbohydrates estimates over a period of 3 months.
 
-**_`TODO: refer to published article(s) of research?`_**
-
 **Note**: [Git LFS](https://git-lfs.github.com/) is required to clone the CSV files in [data-csv/Fitbit/](data-csv/Fitbit)
 
 # Data pre-processing
